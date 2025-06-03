@@ -1,95 +1,113 @@
+import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
-import styles from "./page.module.css";
+import Link from "next/link";
+import { Pokemon } from "./types/pokemonTypes";
+import { News } from "@/app/types/NewsType";
 
-export default function Home() {
+async function getStats() {
+  try {
+    const pokemonRes = await fetch('http://localhost:3000/api/pokemon', { cache: 'no-store' });
+    const newsRes = await fetch('http://localhost:3000/api/news', { cache: 'no-store' });
+    
+    const pokemon: Pokemon[] = await pokemonRes.json();
+    const news: News[] = await newsRes.json();
+
+    return {
+      pokemonCount: pokemon.length,
+      newsCount: news.length,
+      typeCount: [...new Set(pokemon.flatMap(p => p.type))].length,
+    };
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    return { pokemonCount: 0, newsCount: 0, typeCount: 0 };
+  }
+}
+
+export default async function Home() {
+  const stats = await getStats();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br">
+      <div className="absolute top-4 right-4">
+        <UserButton afterSignOutUrl="/sign-in" />
+      </div>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 pt-20 pb-12">
+        <div className="text-center relative">
+          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-6">
+            Pokemon World
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-12">
+            Discover the fascinating world of Pokemon, explore their abilities, and stay updated with the latest news.
+          </p>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Stats Section with Hover Effects */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
+          <div className="transform hover:scale-105 transition-all duration-300">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-blue-100">
+              <div className="text-4xl font-bold text-blue-600 mb-2">{stats.pokemonCount}</div>
+              <div className="text-gray-600">Pokemon Collection</div>
+            </div>
+          </div>
+          <div className="transform hover:scale-105 transition-all duration-300">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-green-100">
+              <div className="text-4xl font-bold text-green-600 mb-2">{stats.typeCount}</div>
+              <div className="text-gray-600">Unique Types</div>
+            </div>
+          </div>
+          <div className="transform hover:scale-105 transition-all duration-300">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl border border-purple-100">
+              <div className="text-4xl font-bold text-purple-600 mb-2">{stats.newsCount}</div>
+              <div className="text-gray-600">Latest Articles</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <Link href="/pokemons" className="group">
+            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-blue-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <div className="relative h-64 mb-6 rounded-xl overflow-hidden">
+                <Image
+                  src="/pokemon-banner.jpg"
+                  alt="Pokemon Collection"
+                  fill
+                  className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <h2 className="absolute bottom-4 left-4 text-3xl font-bold text-white">
+                  Browse Collection
+                </h2>
+              </div>
+              <p className="text-gray-600 text-lg">
+                Explore our extensive collection of Pokemon and discover their unique abilities.
+              </p>
+            </div>
+          </Link>
+
+          <Link href="/news" className="group">
+            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-purple-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <div className="relative h-64 mb-6 rounded-xl overflow-hidden">
+                <Image
+                  src="/news-banner.jpg"
+                  alt="Pokemon News"
+                  fill
+                  className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <h2 className="absolute bottom-4 left-4 text-3xl font-bold text-white">
+                  Latest News
+                </h2>
+              </div>
+              <p className="text-gray-600 text-lg">
+                Stay updated with the latest Pokemon news and community updates.
+              </p>
+            </div>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
