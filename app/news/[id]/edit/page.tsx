@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
-import { News } from "@/app/types/NewsType";
+import { News } from "@/types/NewsType";
 
 const EditNewsPage = () => {
   const router = useRouter();
@@ -23,9 +23,7 @@ const EditNewsPage = () => {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/news/${params.id}`
-        );
+        const response = await axios.get(`http://localhost:3000/api/news/${params.id}`);
         setNews(response.data);
       } catch (error) {
         console.error("Error fetching News:", error);
@@ -40,9 +38,7 @@ const EditNewsPage = () => {
     }
   }, [params.id]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNews((prev) => ({
       ...prev,
@@ -80,47 +76,24 @@ const EditNewsPage = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-sm font-medium mb-2">Title</label>
-          <Input
-            name="title"
-            value={news.title}
-            onChange={handleInputChange}
-            className="w-full"
-            required
-          />
+          <Input name="title" value={news.title} onChange={handleInputChange} className="w-full" required />
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-2">Content</label>
-          <Textarea
-            name="content"
-            value={news.content}
-            onChange={handleInputChange}
-            className="w-full min-h-[200px]"
-            required
-          />
+          <Textarea name="content" value={news.content} onChange={handleInputChange} className="w-full min-h-[200px]" required />
         </div>
 
         <div>
           <label className="block text-sm font-medium mb-2">Image URL</label>
-          <Input
-            name="image"
-            value={news.image}
-            onChange={handleInputChange}
-            type="url"
-            className="w-full"
-            required
-          />
+          <Input name="image" value={news.image} onChange={handleInputChange} type="url" className="w-full" required />
         </div>
 
         <div className="flex gap-4">
           <Button type="submit" disabled={submitting}>
             {submitting ? "Updating..." : "Update News"}
           </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => router.back()}
-          >
+          <Button type="button" variant="secondary" onClick={() => router.back()}>
             Cancel
           </Button>
         </div>

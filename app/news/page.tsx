@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { News } from "../types/NewsType";
+import { News } from "../../types/NewsType";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -14,11 +14,15 @@ const NewsPage = () => {
   const [error, setError] = useState<string>("");
   const router = useRouter();
 
-    const handleDelete = async (id: string, title: string) => {
+  const truncateText = (text: string, maxLength: number) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
+
+  const handleDelete = async (id: string, title: string) => {
     if (window.confirm(`Are you sure you want to delete ${title}?`)) {
       try {
         await axios.delete(`http://localhost:3000/api/news/${id}`);
-        setNews(news.filter(news => news._id !== id));
+        setNews(news.filter((news) => news._id !== id));
       } catch (error) {
         console.error("Error deleting news:", error);
       }
@@ -66,18 +70,21 @@ const NewsPage = () => {
           {news.map((news) => (
             <TableRow key={news._id}>
               <TableCell>{news.title}</TableCell>
-              <TableCell>{news.content}</TableCell>
+              <TableCell className="max-w-[300px]">
+                <div className="truncate" title={news.content}>
+                  {truncateText(news.content, 50)}
+                </div>
+              </TableCell>
               <TableCell>
                 <Image src={news.image} alt={news.title} width={100} height={100} />
               </TableCell>
               <TableCell>
-                <Button
-                  onClick={() => router.push(`/news/${news._id}/edit`)}
-                  className="bg-blue-500 text-white hover:bg-blue-600"
-                >
+                <Button onClick={() => router.push(`/news/${news._id}/edit`)} className="bg-blue-500 text-white hover:bg-blue-600">
                   Edit
                 </Button>
-                <Button className="ml-2 bg-red-500 text-white hover:bg-red-600" onClick={() => handleDelete(news._id, news.title)}>Delete</Button>
+                <Button className="ml-2 bg-red-500 text-white hover:bg-red-600" onClick={() => handleDelete(news._id, news.title)}>
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}

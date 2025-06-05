@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import connectionDb from "@/app/lib/db/ConnectionDb";
-import { Pokemon } from "@/app/lib/models/pokemon";
+import connectionDb from "@/lib/db/ConnectionDb";
+import { Pokemon } from "@/lib/models/pokemon";
 
 // Untuk semua response, tambahkan CORS header
 function withCORS(response: NextResponse) {

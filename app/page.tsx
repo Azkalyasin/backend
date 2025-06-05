@@ -1,24 +1,22 @@
-import { UserButton } from "@clerk/nextjs";
-import Image from "next/image";
-import Link from "next/link";
-import { Pokemon } from "./types/pokemonTypes";
-import { News } from "@/app/types/NewsType";
+
+import { Pokemon } from "../types/pokemonTypes";
+import { News } from "@/types/NewsType";
 
 async function getStats() {
   try {
-    const pokemonRes = await fetch('http://localhost:3000/api/pokemon', { cache: 'no-store' });
-    const newsRes = await fetch('http://localhost:3000/api/news', { cache: 'no-store' });
-    
+    const pokemonRes = await fetch("http://localhost:3000/api/pokemon", { cache: "no-store" });
+    const newsRes = await fetch("http://localhost:3000/api/news", { cache: "no-store" });
+
     const pokemon: Pokemon[] = await pokemonRes.json();
     const news: News[] = await newsRes.json();
 
     return {
       pokemonCount: pokemon.length,
       newsCount: news.length,
-      typeCount: [...new Set(pokemon.flatMap(p => p.type))].length,
+      typeCount: [...new Set(pokemon.flatMap((p) => p.type))].length,
     };
   } catch (error) {
-    console.error('Error fetching stats:', error);
+    console.error("Error fetching stats:", error);
     return { pokemonCount: 0, newsCount: 0, typeCount: 0 };
   }
 }
@@ -28,19 +26,11 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br">
-      <div className="absolute top-4 right-4">
-        <UserButton afterSignOutUrl="/sign-in" />
-      </div>
-
       {/* Hero Section */}
       <div className="container mx-auto px-4 pt-20 pb-12">
         <div className="text-center relative">
-          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-6">
-            Pokemon World
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-12">
-            Discover the fascinating world of Pokemon, explore their abilities, and stay updated with the latest news.
-          </p>
+          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-6">Pokemon World</h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-12">Discover the fascinating world of Pokemon, explore their abilities, and stay updated with the latest news.</p>
         </div>
 
         {/* Stats Section with Hover Effects */}
@@ -65,48 +55,6 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <Link href="/pokemons" className="group">
-            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-blue-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              <div className="relative h-64 mb-6 rounded-xl overflow-hidden">
-                <Image
-                  src="/pokemon-banner.jpg"
-                  alt="Pokemon Collection"
-                  fill
-                  className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <h2 className="absolute bottom-4 left-4 text-3xl font-bold text-white">
-                  Browse Collection
-                </h2>
-              </div>
-              <p className="text-gray-600 text-lg">
-                Explore our extensive collection of Pokemon and discover their unique abilities.
-              </p>
-            </div>
-          </Link>
-
-          <Link href="/news" className="group">
-            <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-purple-100 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              <div className="relative h-64 mb-6 rounded-xl overflow-hidden">
-                <Image
-                  src="/news-banner.jpg"
-                  alt="Pokemon News"
-                  fill
-                  className="object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <h2 className="absolute bottom-4 left-4 text-3xl font-bold text-white">
-                  Latest News
-                </h2>
-              </div>
-              <p className="text-gray-600 text-lg">
-                Stay updated with the latest Pokemon news and community updates.
-              </p>
-            </div>
-          </Link>
-        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { News } from "@/app/lib/models/News";
-import connectionDb from "@/app/lib/db/ConnectionDb";
+import { News } from "@/lib/models/News";
+import connectionDb from "@/lib/db/ConnectionDb";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

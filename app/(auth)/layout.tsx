@@ -1,7 +1,20 @@
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Authentication - Pokemon World",
+  description: "Sign in or register for Pokemon World",
+};
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      {children}
+    <div className="">
+      <div className="">
+        {children}
+      </div>
     </div>
   );
 }
