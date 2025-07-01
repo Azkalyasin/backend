@@ -8,3 +8,12 @@ Kelompok 6:
 ![usecase admin](https://github.com/user-attachments/assets/bdb15035-ad58-4904-a817-9e41ece3bbad)
 Tampilan web bagian Admin
 ![Screenshot 2025-06-12 181015](https://github.com/user-attachments/assets/bf364bc9-638a-442b-b837-f4afa1159652)
+
+rangkuman 3 halaman:
+[kelompok 6.pdf](https://github.com/user-attachments/files/20989065/kelompok.6.pdf)
+
+Naskah publikasi
+[Kelompok6_Paper.docx](https://github.com/user-attachments/files/20989070/Kelompok6_Paper.docx)
+
+link Dokumentasi Database: 
+https://drive.google.com/drive/folders/1cYX6IBh-8b-lQvLKHbDOJXAJbOACxSkX?usp=sharing
